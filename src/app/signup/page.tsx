@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
+import { getApiUrl } from "@/lib/getApiUrl";
 
 export default function SignupPage() {
   const [firstName, setFirstName] = useState('');
@@ -22,7 +23,7 @@ export default function SignupPage() {
     setError('');
     setSuccess('');
     try {
-      await axios.post("http://localhost:3001/api/auth/signup", { firstName, lastName, email, password });
+      await axios.post(`${getApiUrl()}/api/auth/signup`, { firstName, lastName, email, password });
       setSuccess('Signup successful! Redirecting to login...');
       setTimeout(() => {
         router.push('/login');

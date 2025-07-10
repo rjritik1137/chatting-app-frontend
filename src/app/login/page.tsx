@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
+import { getApiUrl } from "@/lib/getApiUrl";
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -18,7 +19,7 @@ export default function LoginPage() {
     e.preventDefault();
     setError('');
     try {
-      const res = await axios.post("http://localhost:3001/api/auth/login", { email, password });
+      const res = await axios.post(`${getApiUrl()}/api/auth/login`, { email, password });
       localStorage.setItem('token', res.data.token);
       router.push('/');
     } catch (error: unknown) {

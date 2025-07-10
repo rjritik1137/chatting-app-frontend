@@ -8,6 +8,7 @@ import axios from "axios";
 import { debounce } from "lodash";
 import { useRouter } from "next/navigation";
 import { io, Socket } from "socket.io-client";
+import { getApiUrl } from "@/lib/getApiUrl";
 
 interface User {
   _id: string;
@@ -76,7 +77,7 @@ export default function ChatPage() {
   // Setup socket connection
   useEffect(() => {
     if (!userId) return;
-    socket.current = io("http://localhost:3001");
+    socket.current = io(getApiUrl());
     socket.current.emit("setup", userId);
     socket.current.on("receiveMessage", (msg: Message) => {
       if (selectedUser && msg.sender === selectedUser._id) {
@@ -100,7 +101,7 @@ export default function ChatPage() {
     setError("");
     try {
       const token = localStorage.getItem("token");
-      const res = await axios.get(`http://localhost:3001/api/users?search=${search}`,
+      const res = await axios.get(`${getApiUrl()}/api/users?search=${search}`,
         { headers: { Authorization: `Bearer ${token}` } });
       setUsers(res.data);
     } catch {
@@ -115,7 +116,7 @@ export default function ChatPage() {
       setError("");
       try {
         const token = localStorage.getItem("token");
-        const res = await axios.get(`http://localhost:3001/api/chats/${selectedUser._id}`,
+        const res = await axios.get(`${getApiUrl()}/api/chats/${selectedUser._id}`,
           { headers: { Authorization: `Bearer ${token}` } });
         setMessages(res.data);
         setUnread(prev => ({ ...prev, [selectedUser._id]: 0 }));
@@ -133,7 +134,7 @@ export default function ChatPage() {
     setError("");
     try {
       const token = localStorage.getItem("token");
-      const res = await axios.post("http://localhost:3001/api/chats", {
+      const res = await axios.post(`${getApiUrl()}/api/chats`, {
         receiver: selectedUser._id,
         content: message,
       }, { headers: { Authorization: `Bearer ${token}` } });
