@@ -5,7 +5,7 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 
 export default function SignupPage() {
@@ -27,8 +27,12 @@ export default function SignupPage() {
       setTimeout(() => {
         router.push('/login');
       }, 1500);
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Signup failed');
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        setError(error.response?.data?.message || 'Signup failed');
+      } else {
+        setError('Signup failed');
+      }
     }
   };
 
