@@ -109,6 +109,14 @@ export default function ChatPage() {
     }
   }, 300), []);
 
+  // Fetch all users on mount
+  useEffect(() => {
+    const interval = setInterval(() => {
+      handleSearch(search);
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [handleSearch]);
+
   // Load messages when user selected
   useEffect(() => {
     const fetchMessages = async () => {
