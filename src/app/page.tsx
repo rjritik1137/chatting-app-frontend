@@ -103,7 +103,7 @@ export default function ChatPage() {
       const res = await axios.get(`http://localhost:3001/api/users?search=${search}`,
         { headers: { Authorization: `Bearer ${token}` } });
       setUsers(res.data);
-    } catch (err: any) {
+    } catch (_: any) {
       setError("Failed to search users");
     }
   }, 300), []);
@@ -119,7 +119,7 @@ export default function ChatPage() {
           { headers: { Authorization: `Bearer ${token}` } });
         setMessages(res.data);
         setUnread(prev => ({ ...prev, [selectedUser._id]: 0 }));
-      } catch (err: any) {
+      } catch (_: any) {
         setError("Failed to load messages");
       }
     };
@@ -144,7 +144,7 @@ export default function ChatPage() {
         content: message,
       });
       setMessage("");
-    } catch (err: any) {
+    } catch (_: any) {
       setError("Failed to send message");
     }
   };
