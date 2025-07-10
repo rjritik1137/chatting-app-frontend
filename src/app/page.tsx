@@ -140,6 +140,7 @@ export default function ChatPage() {
       }, { headers: { Authorization: `Bearer ${token}` } });
       setMessages((prev) => [...prev, res.data]);
       socket.current?.emit("sendMessage", {
+        id: res.data._id,
         sender: userId,
         receiver: selectedUser._id,
         content: message,
