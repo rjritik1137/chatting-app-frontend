@@ -5,7 +5,7 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
@@ -21,8 +21,12 @@ export default function LoginPage() {
       const res = await axios.post("http://localhost:3001/api/auth/login", { email, password });
       localStorage.setItem('token', res.data.token);
       router.push('/');
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Login failed');
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        setError(error.response?.data?.message || 'Login failed');
+      } else {
+        setError('Login failed');
+      }
     }
   };
 
